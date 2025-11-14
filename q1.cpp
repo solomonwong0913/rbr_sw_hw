@@ -22,9 +22,9 @@ MCP2515 mcp2515(10);
 
 void setup() {
     // set the pinMode on the input pin
-    pinMode(PC0, INPUT);
+    pinMode(A0, INPUT);
     // set the pinMode on the LED pin
-    pinMode(PD2, OUTPUT);
+    pinMode(2, OUTPUT);
     // initialize the CAN controller at 500kbps
     mcp2515.reset();
     mcp2515.setBitrate(CAN_500KBPS, MCP_20MHZ);
@@ -43,10 +43,10 @@ void loop() {
         // check if the received frame is of ID 0x420 and first data byte is 0x69
         if ((rxFrame.can_id == 0x420) && (rxFrame.data[0] == 0x69)) {
             // turn on the LED to indicate activity
-            digitalWrite(PD2, HIGH);
+            digitalWrite(2, HIGH);
 
             // read the analog value from the input pin and store it as a variable
-            uint16_t analogValue = analogRead(PC0);
+            uint16_t analogValue = analogRead(A0);
 
             // prepare the CAN frame to send
             txFrame.can_id = 0x690; // replace with desired send ID
@@ -58,7 +58,7 @@ void loop() {
             mcp2515.sendMessage(&txFrame);
 
             // turn off the LED after sending
-            digitalWrite(PD2, LOW);
+            digitalWrite(2, LOW);
         }
     }
 }
